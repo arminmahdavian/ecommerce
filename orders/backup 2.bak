@@ -8,8 +8,7 @@ from products.models import Product
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
-    quantity = models.PositiveIntegerField(default=1)
+    cart = models.OneToOneField('cart.Cart', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_cart')
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[
         ('pending', 'pending'),
@@ -18,7 +17,7 @@ class Order(models.Model):
     ], default='pending')
 
     def __str__(self):
-        return f'Order {self.id}, {self.product.name}, by {self.product.user.username}'
+        return f'Order {self.id}, by {self.user.username}'
 
 
 
